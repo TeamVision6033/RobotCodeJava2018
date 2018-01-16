@@ -13,6 +13,7 @@ package org.usfirst.frc6033.RobotCodeJava2018;
 
 import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
@@ -47,9 +48,16 @@ public class Robot extends TimedRobot {
     
     public DriverStation driveStation;
     public CameraServer cameraServer;
+    public Alliance alliance;
     
     public double gyroAngle;
     public static VisionData visionData;
+    
+    private int startLocation;
+    
+    private char sideSwitch = 'U';
+    private char sideScale = 'U';
+    private char sideOpponentSwitch = 'U';
 
     /**
      * This function is run when the robot is first started up and should be
@@ -84,6 +92,18 @@ public class Robot extends TimedRobot {
         visionData = new VisionData();
         
         driveStation = DriverStation.getInstance();
+        // added 1-16-18 Bill S
+        alliance = driveStation.getAlliance();
+        startLocation = driveStation.getLocation();
+        
+        String gameData;
+		gameData = DriverStation.getInstance().getGameSpecificMessage();
+		if (gameData.length() >= 3)
+		{
+			this.sideSwitch = gameData.charAt(0);
+			this.sideScale = gameData.charAt(1);
+			this.sideOpponentSwitch = gameData.charAt(2);
+		}
     }
 
     /**
@@ -98,6 +118,7 @@ public class Robot extends TimedRobot {
     @Override
     public void disabledPeriodic() {
         Scheduler.getInstance().run();
+        updateDashboardParameters();
     }
 
     @Override
@@ -113,6 +134,7 @@ public class Robot extends TimedRobot {
     @Override
     public void autonomousPeriodic() {
         Scheduler.getInstance().run();
+        updateDashboardParameters();
     }
 
     @Override
@@ -130,6 +152,7 @@ public class Robot extends TimedRobot {
     @Override
     public void teleopPeriodic() {
         Scheduler.getInstance().run();
+        updateDashboardParameters();
     }
     
 	private void updateDashboardParameters() {
@@ -137,5 +160,51 @@ public class Robot extends TimedRobot {
 		//SmartDashboard.putNumber("gyroAngle", gyroAngle);
 		//SmartDashboard.putNumber("FrontSonarDistance", drive.getFrontSonarDistance());
 		//visionData.readVisionData();
+	}
+	
+	/**
+	 * returns position of current teams starting location
+	 * @return int 1=left 2=center 3=right
+	 */
+	public int getStartLocation()
+	{
+		return this.startLocation;
+	}
+	
+	/**
+	 * returns position of current teams side of the switch
+	 * @return char R = Right, L = Left, U = Unknown
+	 */
+	public char getSideSwitch()
+	{
+		return this.sideSwitch;
+	}
+	
+	/**
+	 * returns position of current teams side of the scale
+	 * @return char R = Right, L = Left, U = Unknown
+	 */
+	public char getSideScale()
+	{
+		return this.sideScale;
+	}
+	
+	/**
+	 * returns position of current teams side of the opponents switch
+	 * @return char R = Right, L = Left, U = Unknown
+	 */
+	public char getSideOpponentSwitch()
+	{
+		return this.sideOpponentSwitch;
+	}
+	
+	/**
+	 * returns the team color
+	 * @return char R = Red, B = Blue, I = Invalid
+	 */
+	public char getColor()
+	{
+		String color_name = this.alliance.name().toString();
+		return color_name.charAt(0);
 	}
 }
