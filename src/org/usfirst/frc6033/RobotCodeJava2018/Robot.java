@@ -45,6 +45,7 @@ public class Robot extends TimedRobot {
     
     public static double AutoSpeed = 0.5;
     public static double AutoTurnSpeed = 0.5;
+    public static double AutoDwell = 0.5;
     
     public DriverStation driveStation;
     public CameraServer cameraServer;
@@ -156,6 +157,7 @@ public class Robot extends TimedRobot {
     }
     
 	private void updateDashboardParameters() {
+		
 		//gyroAngle = drive.getGyroAngle();
 		//SmartDashboard.putNumber("gyroAngle", gyroAngle);
 		//SmartDashboard.putNumber("FrontSonarDistance", drive.getFrontSonarDistance());
