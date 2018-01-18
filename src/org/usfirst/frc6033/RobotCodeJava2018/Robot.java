@@ -8,6 +8,7 @@
 // update. Deleting the comments indicating the section will prevent
 // it from being updated in the future.
 
+//JPK - This is a test comment.
 
 package org.usfirst.frc6033.RobotCodeJava2018;
 
