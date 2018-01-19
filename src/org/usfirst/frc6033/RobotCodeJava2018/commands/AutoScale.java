@@ -59,6 +59,7 @@ public class AutoScale extends AutoBase {
 		double distance3 = 7.2;
 
 		double robotLength = 0;
+		//new comment
 
 		int turnFactor = (this.getSideSwitch() == 'L') ? -1 : 1;
 
