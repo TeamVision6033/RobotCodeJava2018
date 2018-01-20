@@ -52,7 +52,7 @@ public class DriveReturnToSetHeading extends Command {
 
 		if (targetHeading > initialAngle) {
 			m_degrees = targetHeading - initialAngle;
-			m_direction = Robot.drive.DriectionRight;
+			m_direction = Robot.drive.DirectionRight;
 		} else {
 			m_degrees = initialAngle - targetHeading;
 			m_direction = Robot.drive.DirectionLeft;
@@ -73,7 +73,7 @@ public class DriveReturnToSetHeading extends Command {
 
 		if (targetHeading > initialAngle) {
 			m_degrees = targetHeading - initialAngle;
-			m_direction = Robot.drive.DriectionRight;
+			m_direction = Robot.drive.DirectionRight;
 		} else {
 			m_degrees = initialAngle - targetHeading;
 			m_direction = Robot.drive.DirectionLeft;
