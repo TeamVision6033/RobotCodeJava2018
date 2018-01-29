@@ -114,7 +114,26 @@ public class Drive extends Subsystem {
 	}
 	
 	public double getRearSonarDistance() {
-		return this.rearSonar.getRangeInches();
+		int fudgefactor = 10; //Change this value to dial it in.
+		double firstDistance = this.rearSonar.getRangeInches();
+		double secondDistance = this.rearSonar.getRangeInches();
+		int fdround = (int) Math.round(firstDistance);
+		int sdround = (int) Math.round(secondDistance);
+		//if (fdround == (sdround) || fdround == (sdround +1) || fdround == (sdround - 1)){
+		if (fdround >= (sdround-fudgefactor) && fdround <= (sdround+fudgefactor)) {
+			return firstDistance;
+		}
+		else {
+			double thirdDistance = this.rearSonar.getRangeInches();
+				int tdround = (int) Math.round(thirdDistance);
+		//if (sdround == (tdround) || sdround == (tdround + 1)|| sdround ==(tdround - 1)) {
+		if (sdround >= (tdround-fudgefactor) && sdround <= (tdround+fudgefactor)) {
+			return sdround; 
+		}
+		else {
+			return this.rearSonar.getRangeInches();}
+		}
+		
 	}
 	
 	public void calibrateGyro()

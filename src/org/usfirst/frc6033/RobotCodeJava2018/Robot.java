@@ -8,8 +8,6 @@
 // update. Deleting the comments indicating the section will prevent
 // it from being updated in the future.
 
-//JPK - This is a test comment.
-
 package org.usfirst.frc6033.RobotCodeJava2018;
 
 import edu.wpi.first.wpilibj.CameraServer;
@@ -46,10 +44,16 @@ public class Robot extends TimedRobot {
     
     public static double AutoSpeed = .5;
     public static double AutoTurnSpeed = 0.5;
-    public static double AutoDwell = 0.5;
-    public static double AutoScale = 1.0;
+    public static double AutoDwell = 1.0; //0.5; //changed to 1.0 to allow a moment for sound to stop
+    											//and get more accurate sonar distance
+    public static double AutoScale = 1.0; //1.0;
     
-    public static double RobotLengthInches = 30;
+    public static double RobotLengthInches = 37.0;//old robot 
+    //public static double RobotLengthInches = 32.25;//new robot 
+    public static double RobotWidthInches = 27.0; //old robot
+    //public static double RobotWidthInches = 23.5; //new robot
+    public static double SensorOffsetInches = 3.75; //old robot
+    //public static double SensorOffsetInches = ?; //new robot
     
     public DriverStation driveStation;
     public CameraServer cameraServer;

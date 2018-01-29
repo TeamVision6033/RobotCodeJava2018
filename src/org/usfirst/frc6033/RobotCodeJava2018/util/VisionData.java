@@ -1,6 +1,5 @@
 package org.usfirst.frc6033.RobotCodeJava2018.util;
 
-import edu.wpi.first.wpilibj.networktables.NetworkTable;
 //import edu.wpi.first.wpilibj.networktables.NetworkTable;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -11,18 +10,18 @@ public class VisionData {
 	private double distance;
 	private double angle;
 	private double heading;
-	private NetworkTable table;
+	//private NetworkTable table;
 
 	public void VisionData() {
 		ConnectToTable();
 	}
 	
 	private void ConnectToTable() {
-		table = NetworkTable.getTable("datatable");
+		//table = NetworkTable.getTable("datatable");
 	}
 
 	public void readVisionData() {
-	
+		/*
 		if (table != null) {
 			seqNo = (int) table.getNumber("VisionSeqNo", -1);
 			age = (int) table.getNumber("VisionAge", -1);
@@ -40,7 +39,7 @@ public class VisionData {
 		SmartDashboard.putNumber("V Distance", distance);
 		SmartDashboard.putNumber("V Angle", angle);
 		SmartDashboard.putNumber("V Heading", heading);
-	
+		*/
 	}
 
 	public int getSeqNo() {
