@@ -64,7 +64,7 @@ public class OI {
 
         // SmartDashboard Buttons
         SmartDashboard.putData("DriveArcadeMode", new DriveArcadeMode());
-        SmartDashboard.putData("DriveStraight: DEFAULT", new DriveStraight(0.3, 3, 0, 10));
+        SmartDashboard.putData("DriveStraight: DEFAULT", new DriveStraight(0.3, 3, 0, 10, 'N', 0));
         SmartDashboard.putData("DriveStop: DEFAULT", new DriveStop(0));
         SmartDashboard.putData("DriveTurn: DEFAULT", new DriveTurn(1, 0.4, 3, 45));
         SmartDashboard.putData("DriveReturnToSetHeading", new DriveReturnToSetHeading());

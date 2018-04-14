@@ -11,6 +11,8 @@
 
 package org.usfirst.frc6033.RobotCodeJava2018.commands;
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 import org.usfirst.frc6033.RobotCodeJava2018.Robot;
 
 /**
@@ -43,7 +45,18 @@ public class DriveArcadeMode extends Command {
     // Called repeatedly when this Command is scheduled to run
     @Override
     protected void execute() {
-    	Robot.drive.ArcadeDrive(Robot.oi.getDriveStick());
+    	double moveValue = this.scalePower(Robot.oi.getDriveStick().getRawAxis(1));
+    	moveValue = moveValue * Math.abs(moveValue);
+    	double rotateValue = this.scalePower(Robot.oi.getDriveStick().getRawAxis(0));
+    	rotateValue = rotateValue * Math.abs(rotateValue);
+    	Robot.drive.ArcadeDrive( moveValue, rotateValue, true);
+    	//Robot.drive.ArcadeDrive(Robot.oi.getDriveStick());
+    }
+    
+    private double scalePower (double power) {
+    	double minPower = 0.2;
+    	double factor = (1 + (Robot.oi.getDriveStick().getRawAxis(3) * -1));
+    	return (power * minPower) + (1 - minPower) * power * factor;
     }
 
     // Make this return true when this Command no longer needs to run execute()

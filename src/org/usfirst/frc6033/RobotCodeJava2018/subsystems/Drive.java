@@ -11,6 +11,7 @@
 
 package org.usfirst.frc6033.RobotCodeJava2018.subsystems;
 
+import org.usfirst.frc6033.RobotCodeJava2018.Robot;
 import org.usfirst.frc6033.RobotCodeJava2018.RobotMap;
 import org.usfirst.frc6033.RobotCodeJava2018.commands.*;
 
@@ -61,6 +62,7 @@ public class Drive extends Subsystem {
 	public static final int DirectionRight = 1;
 	
     private double savedHeading;
+   
 
     @Override
     public void initDefaultCommand() {
@@ -120,6 +122,7 @@ public class Drive extends Subsystem {
 	}
 	
 	public double getRearSonarDistance() {
+		/*//Not needed - experimental to see if rear sonar distance was accurate.
 		int fudgefactor = 10; //Change this value to dial it in.
 		double firstDistance = this.rearSonar.getRangeInches();
 		double secondDistance = this.rearSonar.getRangeInches();
@@ -137,8 +140,10 @@ public class Drive extends Subsystem {
 			return sdround; 
 		}
 		else {
-			return this.rearSonar.getRangeInches();}
-		}
+	*/
+			return this.rearSonar.getRangeInches() - Robot.SensorOffsetInches;
+		/*	}
+		}*/
 		
 	}
 	
@@ -166,7 +171,8 @@ public class Drive extends Subsystem {
 	}
 
 	public double getDistance() {
-		return (getDistanceLeftEncoder() + getDistanceRightEncoder()) / 2;
+		return this.getDistanceLeftEncoder();
+		//return (getDistanceLeftEncoder() + getDistanceRightEncoder()) / 2;
 	}
 
 	public void resetEncoders() {
@@ -192,6 +198,11 @@ public class Drive extends Subsystem {
     public double getSavedHeading()
     {
     	return this.savedHeading;
+    }
+    
+    public double getAveragePower()
+    {
+    	return (Math.abs(right.get()) + Math.abs(left.get()))  /2;
     }
     
     

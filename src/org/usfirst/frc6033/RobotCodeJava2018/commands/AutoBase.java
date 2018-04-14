@@ -6,82 +6,93 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import org.usfirst.frc6033.RobotCodeJava2018.Robot;
+import org.usfirst.frc6033.RobotCodeJava2018.RobotMap;
 import org.usfirst.frc6033.RobotCodeJava2018.commands.DriveReturnToSetHeading;
 import org.usfirst.frc6033.RobotCodeJava2018.commands.DriveStop;
 import org.usfirst.frc6033.RobotCodeJava2018.commands.DriveStraight;
 import org.usfirst.frc6033.RobotCodeJava2018.subsystems.*;
+import org.usfirst.frc6033.RobotCodeJava2018.util.GameData;
 
 public class AutoBase extends CommandGroup {
-	protected char sideSwitch = 'U';
-	protected char sideScale = 'U';
-	protected char sideOpponentSwitch = 'U';
 
-	protected void getGameData() {
-		String gameData = DriverStation.getInstance().getGameSpecificMessage();
-		if (gameData.length() >= 3) {
-			sideSwitch = gameData.charAt(0);
-			sideScale = gameData.charAt(1);
-			sideOpponentSwitch = gameData.charAt(2);
-			SmartDashboard.putString("gameData", gameData);
-		}
-	}
-
+	protected final double scaleHeight = 68;
+	protected final double switchHeight = 24;
+	protected final double crossLineDistance = 84;
+	
 	protected void Turn45(int direction) {
-		addSequential(new DriveTurn(direction, Robot.AutoTurnSpeed, 0, 32));
+		// initial value was 32
+		addSequential(new DriveTurn(direction, Robot.AutoTurnSpeed, 0, 45));
 		addSequential(new DriveStop(Robot.AutoDwell));
 	}
 
 	protected void Turn90(int direction) {
-		addSequential(new DriveTurn(direction, Robot.AutoTurnSpeed, 0, 72.25));
+		// initial value was 72.25
+		addSequential(new DriveTurn(direction, Robot.AutoTurnSpeed, 3, 80));
 		addSequential(new DriveStop(Robot.AutoDwell));
 	}
 
 	protected void DriveStraightDistance(double inches) {
-		DriveStraightDistance(inches, false);
+		DriveStraightDistance(inches, 'N');
 	}
 
-	protected void DriveStraightDistanceFromRear(double inches) {
-		addSequential(new DriveStraight(Robot.AutoSpeed, 15, 0, 0, false, inches * Robot.AutoScale));
-		addSequential(new DriveStop(Robot.AutoDwell));
-	}
-
-	protected void DriveStraightDistance(double inches, boolean followSide) {
+	protected void DriveStraightDistance(double inches, char followSide) {
 		DriveStraightDistance(inches, followSide, true);
 	}
 
-	protected void DriveStraightDistance(double inches, boolean followSide, boolean stop) {
-		addSequential(new DriveStraight(Robot.AutoSpeed, 15, inches * Robot.AutoScale, 12, followSide, 0));
+	protected void DriveStraightDistance(double inches, char followSide, boolean stop) {
+		DriveStraightDistance(Robot.AutoSpeed, inches, followSide, stop);
+	}
+
+	protected void DriveStraightDistance(double speed, double inches, char followSide, boolean stop) {
+		DriveStraightDistance(speed, inches, followSide, stop, 0, false, 0);
+	}
+
+	protected void DriveStraightDistance(double speed, double inches, char followSide, boolean stop,
+			double elevatorPosition, boolean lowerForks, double timeLimit) {
+		if (timeLimit <= 0)
+			timeLimit = 15;
+		if (lowerForks)
+			addParallel(new ForksDown());
+		if (elevatorPosition > 0)
+			addParallel(new RaiseElevator(elevatorPosition));
+		addSequential(new DriveStraight(speed, timeLimit, inches * Robot.AutoScale, 0, followSide, 0));
 		if (stop)
 			addSequential(new DriveStop(Robot.AutoDwell));
 	}
 
-	/**
-	 * returns position of current teams side of the switch
-	 * 
-	 * @return char R = Right, L = Left, U = Unknown
-	 */
-	public char getSideSwitch() {
-		getGameData();
-		return sideSwitch;
+	protected void ReturnToSetHeading() {
+		addSequential(new DriveReturnToSetHeading());
+	}
+
+	protected void DriveStraightDistanceFromRear(double inches) {
+
+		DriveStraightDistanceFromRear(Robot.AutoSpeed, inches, 0);
+	}
+	
+	protected void DriveRaiseElevator (double elevatorposition) {
+		addSequential(new RaiseElevator(elevatorposition));
+	}
+
+	protected void DriveStraightDistanceFromRear(double speed, double inches, double elevatorPosition) {
+		if (elevatorPosition > 0)
+			addParallel(new RaiseElevator(elevatorPosition));
+		addSequential(new DriveStraight(speed, 15, 0, 0, 'N', inches * Robot.AutoScale));
 	}
 
 	/**
-	 * returns position of current teams side of the scale
 	 * 
-	 * @return char R = Right, L = Left, U = Unknown
+	 * @param inches
+	 *            Distance Limit in Inches.
+	 * @param stopAtInches
+	 *            Distance (in inches) to stop at, as read from front sonar before
+	 *            moving forward.
 	 */
-	public char getSideScale() {
-		getGameData();
-		return sideScale;
+	protected void DriveStraightDistanceFromFront(double inches, double stopAtInches) {
+		addSequential(new DriveStraight(Robot.AutoSpeed, 15, inches * Robot.AutoScale, stopAtInches, 'N', 0));
+		addSequential(new DriveStop(Robot.AutoDwell));
 	}
 
-	/**
-	 * returns position of current teams side of the opponents switch
-	 * 
-	 * @return char R = Right, L = Left, U = Unknown
-	 */
-	public char getSideOpponentSwitch() {
-		getGameData();
-		return sideOpponentSwitch;
+	public void ClampOpen() {
+		addSequential(new OpenClamp());
 	}
 }
